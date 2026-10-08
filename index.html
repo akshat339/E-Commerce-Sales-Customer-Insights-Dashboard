@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retail Performance Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #f4f6f9; color: #212529; padding: 24px; }
+    .header { margin-bottom: 24px; }
+    .header h1 { font-size: 24px; color: #1e293b; }
+    .header p { color: #64748b; font-size: 14px; margin-top: 4px; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .card { background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }
+    .kpi-title { font-size: 13px; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+    .kpi-value { font-size: 26px; font-weight: 700; color: #0f172a; }
+    .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px; }
+    .chart-container { position: relative; height: 280px; margin-top: 12px; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>E-Commerce Executive Summary</h1>
+    <p>Automated transactional log pipeline & key metric tracking</p>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="card">
+      <div class="kpi-title">Total Revenue</div>
+      <div class="kpi-value" id="totalRev">₹1,47,700</div>
+    </div>
+    <div class="card">
+      <div class="kpi-title">Completed Orders</div>
+      <div class="kpi-value" id="totalOrders">10</div>
+    </div>
+    <div class="card">
+      <div class="kpi-title">Avg Order Value (AOV)</div>
+      <div class="kpi-value" id="avgAov">₹14,770</div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="card">
+      <h3>Revenue by Category</h3>
+      <div class="chart-container">
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Monthly Revenue Trend</h3>
+      <div class="chart-container">
+        <canvas id="trendChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialized with default aggregates from process_data.py
+    const data = {
+      categories: ["Apparel", "Electronics", "Home"],
+      catValues: [8500, 116500, 22700],
+      months: ["Jan 2026", "Feb 2026", "Mar 2026", "Apr 2026"],
+      monthValues: [18600, 51000, 44700, 33400]
+    };
+
+    // Category Doughnut Chart
+    new Chart(document.getElementById('categoryChart'), {
+      type: 'doughnut',
+      data: {
+        labels: data.categories,
+        datasets: [{
+          data: data.catValues,
+          backgroundColor: ['#3b82f6', '#10b981', '#f59e0b']
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // Monthly Trend Line Chart
+    new Chart(document.getElementById('trendChart'), {
+      type: 'line',
+      data: {
+        labels: data.months,
+        datasets: [{
+          label: 'Revenue (INR)',
+          data: data.monthValues,
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37, 99, 235, 0.1)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  </script>
+</body>
+</html>
